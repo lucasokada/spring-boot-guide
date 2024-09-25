@@ -5,6 +5,11 @@ import com.example.spring_boot_guide.dto.assembler.FisicaAssembler;
 import com.example.spring_boot_guide.entity.Fisica;
 import com.example.spring_boot_guide.entity.mapper.FisicaMapper;
 import com.example.spring_boot_guide.service.FisicaService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -64,6 +69,14 @@ public class FisicaResource {
         return update;
     }
 
+    @Operation(summary = "Retorna uma pessoa pelo CPF")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Pessoa-física encontrada!", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = Fisica.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "CPF inválido!", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Pessoa-física não encontrada!", content = @Content)
+    })
     @GetMapping("/{cpf}")
     public Fisica getFisicaByCpf(@PathVariable(value = "cpf") String cpf) {
         return fisicaService.findByCpf(cpf);
